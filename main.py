@@ -1,5 +1,13 @@
 import parking
 
+def show_vehicles():
+    for vehicle in parking.vehicles:
+        print('ID: ' + vehicle['id'])
+        print('Model name: ' + vehicle['model_name'])
+        print('Model year: ' + vehicle['model_year'])
+        print('Arrival date: ' + vehicle['arrival_date'].strftime('%d/%m/%y at %H:%M:%S'))
+        print()
+
 def handle_park_in():
     if parking.is_full():
         print("Full parking, can't park in")
@@ -30,11 +38,12 @@ if __name__ == '__main__':
 1. Park in vehicle
 2. Park out vehicle
 3. Show available slots
-4. Show statistics
-5. Exit
+4. Show vehicles
+5. Show statistics
+6. Exit
 \n''')
-        while choice_str not in ['1', '2', '3', '4', '5']:
-            choice = input('Please enter a valid choice: ')
+        while not choice_str.isnumeric():
+            choice_str = input('Please enter a valid choice: ')
 
         choice = int(choice_str)
         if choice == 1:
@@ -44,8 +53,10 @@ if __name__ == '__main__':
         elif choice == 3:
             print(', '.join(map(str, parking.available_slots)))
         elif choice == 4:
-            print(f'Total number of vehicle: {parking.total_no_vehicles}\nTotal Income: {parking.total_income}')
+            show_vehicles()
         elif choice == 5:
+            print(f'Total number of vehicle: {parking.total_no_vehicles}\nTotal Income: {parking.total_income}')
+        elif choice == 6:
             break
         else:
             print('Invalid choice')

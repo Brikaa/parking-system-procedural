@@ -6,9 +6,10 @@ vehicles = []
 available_slots = []
 total_slots = 0
 total_no_vehicles = 0
-total_income = []
+total_income = 0
 
 def initialize_available_slots(no_available_slots):
+    global total_slots
     for i in range(no_available_slots, 0, -1):
         available_slots.append(i)
     total_slots = no_available_slots
@@ -23,6 +24,7 @@ def is_full():
     return len(vehicles) == total_slots
 
 def park_in_vehicle(model_name, model_year):
+    global total_no_vehicles
     slot_number = available_slots.pop()
     vehicles.append({
         'id': str(slot_number),
@@ -34,11 +36,14 @@ def park_in_vehicle(model_name, model_year):
     total_no_vehicles += 1
 
 def park_out_vehicle(vehicle_id):
+    global total_income
     vehicle_index = find_vehicle_by_id(vehicle_id)
     if vehicle_index == -1:
         return -1
     vehicle = vehicles.pop(vehicle_index)
-    available_slots.push(vehicle['slot_number'])
+    available_slots.append(vehicle['slot_number'])
     time_delta = datetime.now() - vehicle['arrival_date']
     time_delta_hours = int(time_delta.seconds / (60 * 60))
-    return time_delta_hours * HOURLY_FEE
+    fees = time_delta_hours * HOURLY_FEE
+    total_income += fees
+    return fees
