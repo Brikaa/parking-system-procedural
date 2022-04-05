@@ -1,4 +1,5 @@
 import parking
+from datetime import datetime
 
 def show_vehicles():
     for vehicle in parking.vehicles:
@@ -14,11 +15,11 @@ def handle_park_in():
         return
     model_name = input('Model name: ')
     model_year = input('Model year: ')
-    parking.park_in_vehicle(model_name, model_year)
+    parking.park_in_vehicle(model_name, model_year, datetime.now())
 
 def handle_park_out():
     vehicle_id = input('Vehicle ID to park out: ')
-    fees = parking.park_out_vehicle(vehicle_id)
+    fees = parking.park_out_vehicle(vehicle_id, datetime.now())
     if fees == -1:
         print('The specified vehicle was not found')
         return
@@ -34,7 +35,7 @@ if __name__ == '__main__':
     parking.initialize_available_slots(no_slots)
 
     while True:
-        choice_str = input('''
+        choice = input('''
 1. Park in vehicle
 2. Park out vehicle
 3. Show available slots
@@ -42,21 +43,17 @@ if __name__ == '__main__':
 5. Show statistics
 6. Exit
 \n''')
-        while not choice_str.isnumeric():
-            choice_str = input('Please enter a valid choice: ')
-
-        choice = int(choice_str)
-        if choice == 1:
+        if choice == '1':
             handle_park_in()
-        elif choice == 2:
+        elif choice == '2':
             handle_park_out()
-        elif choice == 3:
+        elif choice == '3':
             print(', '.join(map(str, parking.available_slots)))
-        elif choice == 4:
+        elif choice == '4':
             show_vehicles()
-        elif choice == 5:
+        elif choice == '5':
             print(f'Total number of vehicle: {parking.total_no_vehicles}\nTotal Income: {parking.total_income}')
-        elif choice == 6:
+        elif choice == '6':
             break
         else:
             print('Invalid choice')
